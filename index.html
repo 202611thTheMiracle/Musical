@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 HIS MUSICAL | 기적, 부활을 만나다</title>
+<style>
+  :root{
+    --burgundy: #7a1220;
+    --burgundy-dark: #4d0d14;
+    --burgundy-light: #a8324a;
+    --white: #ffffff;
+    --off-white: #faf6f6;
+    --text-dark: #2a1013;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{ width:100%; overflow-x:hidden; }
+  body{
+    font-family: 'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    background: var(--off-white);
+    color: var(--text-dark);
+    line-height:1.7;
+  }
+  header{ position: sticky; top:0; z-index:100; background: var(--burgundy); box-shadow: 0 2px 10px rgba(0,0,0,0.2); width:100%; }
+  nav{ width:100%; display:flex; align-items:center; justify-content:space-between; padding: 14px 4vw; }
+  .logo{ color:var(--white); font-weight:700; font-size:1.05rem; letter-spacing:0.5px; }
+  .nav-links{ list-style:none; display:flex; gap:24px; flex-wrap:wrap;}
+  .nav-links a{ color:var(--white); text-decoration:none; font-size:0.92rem; font-weight:500; border-bottom:2px solid transparent; padding-bottom:4px; transition:.2s; }
+  .nav-links a:hover{ border-bottom-color: var(--white); }
+
+  .hero{ width:100%; background: linear-gradient(160deg, var(--burgundy-dark), var(--burgundy) 60%, var(--burgundy-light)); color:var(--white); text-align:center; padding: 100px 4vw 90px; }
+  .hero .year{ font-size:1rem; letter-spacing:4px; opacity:.85;}
+  .hero h1{ font-size:2.6rem; margin:14px 0 8px; font-weight:800; }
+  .hero h2{ font-size:1.15rem; font-weight:400; opacity:.9; font-style:italic; }
+  .hero .line{ width:70px; height:3px; background:var(--white); margin:26px auto; opacity:.7; }
+
+  section{ width:100%; padding: 70px 4vw; }
+  section.alt{ background:var(--white); }
+  h3.section-title{ font-size:1.7rem; color:var(--burgundy); text-align:center; margin-bottom:10px; font-weight:800; }
+  .title-underline{ width:50px; height:4px; background:var(--burgundy); margin:0 auto 40px; }
+
+  .photo-box{ background:#f3e3e6; border:2px dashed var(--burgundy-light); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--burgundy); font-size:.8rem; font-weight:600; text-align:center; padding:6px; }
+  .photo-box.sq{ width:100%; aspect-ratio:1/1; }
+  .photo-box.r32{ width:100%; aspect-ratio:3/2; }
+  .photo-box.small{ width:80px; height:80px; border-radius:8px; font-size:.65rem; margin:0 auto; }
+
+  /* ===== 시놉시스 : 파노라마 (사진 박스 1920x1080 = 16:9 비율) ===== */
+  .synopsis-intro{ background:var(--white); border-left:6px solid var(--burgundy); padding: 22px 28px; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.06); font-size:.95rem; color:#4a2226; margin-bottom:30px; }
+  .placeholder{ color:#a06070; font-style:italic; font-size:.9rem; }
+
+  .panorama-wrap{ width:100%; overflow-x:auto; padding-bottom:16px; scroll-snap-type:x mandatory; }
+  .panorama-track{ display:flex; gap:0; width:max-content; }
+  .pano-scene{ scroll-snap-align:start; flex:0 0 auto; width:640px; background:var(--white); border-right:2px solid var(--off-white); }
+  .pano-scene .photo-box{ width:100%; height:auto; aspect-ratio:1920/1080; border-radius:0; }
+  .pano-body{ padding:16px 20px; }
+  .pano-label{ font-weight:700; color:var(--burgundy); font-size:.95rem; margin-bottom:6px; }
+  .pano-text{ min-height:56px; border:1px dashed #e0b8bf; border-radius:6px; padding:10px 12px; font-size:.85rem; color:#8a5a62; background:#fdf7f8; }
+  .panorama-hint{ text-align:center; font-size:.82rem; color:#a06070; margin-top:10px; }
+
+  @media (max-width:640px){ .pano-scene{ width:88vw; } }
+
+  /* ===== 인물 소개 ===== */
+  .cast-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:22px; width:100%; }
+  .cast-card{ background:var(--white); border:1px solid #eddadf; border-radius:10px; padding:20px 16px; text-align:center; transition:.25s; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .cast-card:hover{ transform:translateY(-4px); box-shadow:0 10px 20px rgba(122,18,32,0.15); }
+  .cast-card .photo-box{ margin-bottom:14px; }
+  .role{ font-weight:700; color:var(--burgundy); font-size:1.05rem; }
+  .actor{ font-size:.92rem; color:#666; margin-top:4px; }
+
+  /* ===== 앙상블 & 역할 : 제자들+백성들 큰 단체사진 한 장 ===== */
+  .group-photo-card{
+    width:100%; background:var(--white); border:1px solid #eddadf; border-radius:12px;
+    overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.06);
+  }
+  .group-photo-card .photo-box{
+    width:100%; aspect-ratio: 16/6; border-radius:0; font-size:1.1rem;
+  }
+  .group-photo-body{ padding:24px 30px; }
+  .group-photo-title{ font-weight:800; color:var(--burgundy); font-size:1.15rem; margin-bottom:14px; }
+  .group-names{ display:flex; flex-wrap:wrap; gap:10px; }
+  .name-chip{ background:var(--off-white); border:1px solid #eddadf; color:#5a2a30; padding:6px 16px; border-radius:20px; font-size:.9rem; font-weight:600; }
+
+  /* ===== 4성부 단원 : 탭으로 파트 전환 (같은 자리에서 소프라노/알토/테너/베이스 표시) ===== */
+  .choir-tabs{ display:flex; gap:12px; justify-content:center; margin-bottom:34px; flex-wrap:wrap; }
+  .choir-tab{ padding:10px 30px; border-radius:30px; border:2px solid var(--burgundy); background:var(--white); color:var(--burgundy); font-weight:800; font-size:1rem; letter-spacing:1px; cursor:pointer; transition:.2s; }
+  .choir-tab:hover{ background:#fbeff1; }
+  .choir-tab.active{ background:var(--burgundy); color:var(--white); }
+
+  .choir-part-title{ display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; }
+  .choir-part-title h4{ color:var(--white); background:var(--burgundy); padding:8px 22px; border-radius:30px; font-size:1.05rem; font-weight:800; letter-spacing:1px; }
+  .choir-part-title .count{ color:var(--burgundy); font-size:.85rem; font-weight:600; }
+
+  .choir-grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:14px; width:100%; }
+  .choir-member{ text-align:center; }
+  .choir-member .photo-box.r32{ margin-bottom:8px; }
+  .choir-name{ font-size:.85rem; color:#555; font-weight:500; }
+
+  @media (max-width:900px){ .choir-grid{ grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width:520px){ .choir-grid{ grid-template-columns: repeat(2, 1fr); } }
+
+  /* ===== 제작팀 표 ===== */
+  table.team-table{ width:100%; border-collapse:collapse; margin-top:20px; font-size:.95rem; }
+  table.team-table th, table.team-table td{ border:1px solid #eddadf; padding:12px 14px; text-align:left; }
+  table.team-table th{ background:var(--burgundy); color:var(--white); }
+  table.team-table tr:nth-child(even){ background:#fbeff1; }
+
+  /* ===== 넘버 ===== */
+  .songlist{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; margin-top:20px; width:100%; }
+  .song-item{ background:var(--off-white); border:1px solid #eddadf; border-radius:6px; padding:10px 14px; font-size:.92rem; }
+  .song-item b{ color:var(--burgundy); }
+
+  footer{ width:100%; background:var(--burgundy-dark); color:var(--white); text-align:center; padding: 34px 4vw; font-size:.85rem; }
+
+  @media (max-width:640px){ .nav-links{ display:none; } .hero h1{ font-size:1.9rem; } .group-photo-card .photo-box{ aspect-ratio:4/3; } }
+
+  /* ===== 영어 번역 버튼 ===== */
+  .lang-toggle-btn{
+    position: fixed;
+    bottom: 26px;
+    right: 22px;
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--burgundy);
+    color: var(--white);
+    border: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s, background .2s;
+  }
+  .lang-toggle-btn:hover{ background: var(--burgundy-light); transform: scale(1.08); }
+  .lang-toggle-btn:active{ transform: scale(0.95); }
+  @media (max-width:520px){ .lang-toggle-btn{ width:48px; height:48px; font-size:.75rem; bottom:16px; right:14px; } }
+
+  /* ===== 인물 상세 모달 ===== */
+  .cast-card{ cursor: pointer; }
+  .cast-modal-overlay{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,4,7,0.65);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .cast-modal-overlay.open{ display: flex; }
+  .cast-modal{
+    background: var(--white);
+    border-radius: 14px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 32px 28px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .cast-modal-close{
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: var(--burgundy);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .cast-modal .photo-box{ width: 140px; height: 140px; margin: 0 auto 18px; border-radius: 12px; }
+  .cast-modal .modal-role{ text-align:center; font-size:1.3rem; font-weight:800; color: var(--burgundy); }
+  .cast-modal .modal-actor{ text-align:center; font-size:.95rem; color:#777; margin-bottom:18px; }
+  .cast-modal .modal-desc{ font-size:.92rem; color:#4a2226; background:var(--off-white); border-left:4px solid var(--burgundy); padding:12px 16px; border-radius:6px; margin-bottom:20px; }
+  .dialogue-list{ display:flex; flex-direction:column; gap:12px; }
+  .dialogue-line{ background:#fdf7f8; border:1px solid #eddadf; border-radius:8px; padding:12px 16px; }
+  .dialogue-speaker{ font-weight:800; color:var(--burgundy); font-size:.85rem; letter-spacing:.5px; margin-bottom:4px; }
+  .dialogue-text{ font-size:.95rem; color:#3a1a1e; font-style:italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">2026 HIS MUSICAL</div>
+    <ul class="nav-links">
+      <li><a href="#home" data-en="Home">홈</a></li>
+      <li><a href="#synopsis" data-en="Synopsis">시놉시스</a></li>
+      <li><a href="#cast" data-en="Cast">인물 소개</a></li>
+      <li><a href="#ensemble" data-en="Ensemble &amp; Roles">앙상블 &amp; 역할</a></li>
+      <li><a href="#choir" data-en="Choir (4 Parts)">4성부 단원</a></li>
+      <li><a href="#team" data-en="Production Team">제작팀</a></li>
+      <li><a href="#songs" data-en="Songs">넘버</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="home" class="hero">
+  <div class="year">2026 HIS MUSICAL</div>
+  <h1 data-en="The Miracle of the Resurrection">기적, 부활을 만나다</h1>
+  <div class="line"></div>
+  <p class="placeholder" data-en="2026.09.08 (TUE) 09:00-10:00 AM · HGU Hyoam Chapel (TBD)">2026.09.08 (TUE) 09:00-10:00 AM · HGU Hyoam Chapel 소망교도소</p>
+</section>
+
+<!-- ===== 시놉시스 : 파노라마 (사진 박스 1920x1080) ===== -->
+<section id="synopsis" class="alt">
+  <h3 class="section-title" data-en="Synopsis">시놉시스</h3>
+  <div class="title-underline"></div>
+
+  <div class="panorama-wrap" id="panoramaWrap">
+    <div class="panorama-track" id="panoramaTrack">
+      <div class="pano-scene">
+<div class="photo-box"><img src="샵화/[Scene 1] 기달림 나레이션(_백성은 날마다 하늘을 바라보며 부르짖기_)-최주영.png" alt="장면 1" style="width:100%;height:100%;object-fit:cover;"></div>        <div class="pano-body"><div class="pano-label" data-en="Scene 1">장면 1</div><div class="pano-text placeholder" data-en="Scene description placeholder">로마의 압제와 고통 속에서 구원자를 기다리던 백성들 앞에 예수님이 나타나 병든 자를 고치시고 복음을 전하며 기적을 베푼 십니다.
+</div></div>
+      </div>
+      <div class="pano-scene">
+        <div class="photo-box"><img src="샵화/[Scene 4] 삭개오-이보리.jpeg" alt="장면 2" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="pano-body"><div class="pano-label" data-en="Scene 2 — Zacchaeus">장면 2 &mdash; 삭개오</div><div class="pano-text placeholder" data-en="Scene description placeholder">모두에게 외면받던 세리장 삭개오의 이름을 부르시며, 조건 없는 사랑으로 소외된 영혼을 품으시는 예수님의 은혜를 보여줍니다.
+</div></div>
+      </div>
+      <div class="pano-scene">
+        <div class="photo-box">사진 넣을 자리 (장면 3)</div>
+        <div class="pano-body"><div class="pano-label" data-en="Scene 3">장면 3</div><div class="pano-text placeholder" data-en="Scene description placeholder">제자들의 흔들림 속에서 예수님은 십자가의 길에 순종하시지만, 베드로의 부인과 가롯 유다의 배신으로 홀로 잡히시게 됩니다.</div></div>
+      </div>
+      <div class="pano-scene">
+        <div class="photo-box">사진 넣을 자리 (장면 4)</div>
+        <div class="pano-body"><div class="pano-label" data-en="Scene 4">장면 4</div><div class="pano-text placeholder" data-en="Scene description placeholder">빌라도의 재판과 군중의 외침 속에 예수님은 인류의 죄를 대신하여 십자가 고난을 받고 숨을 거두시며, 백성들과 마리아는 그 크신 사랑을 기억하며 슬퍼합니다. </div></div>
+      </div>
+      <div class="pano-scene">
+        <div class="photo-box">사진 넣을 자리 (장면 5)</div>
+        <div class="pano-body"><div class="pano-label" data-en="Scene 5">장면 5</div><div class="pano-text placeholder" data-en="Scene description placeholder">사망 권세를 이기시고 사흘 만에 부활하신 예수 그리스도를 찬양하며, 절망을 넘어선 참된 구원과 희망을 선포하며 막을 내립니다.
+</div></div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <p class="panorama-hint" data-en="Auto-playing — hover to pause, or scroll sideways manually →">← 옆으로 스크롤하며 장면을 넘겨보세요 →</p>
+</section>
+
+<!-- ===== 인물 소개 (대사 1개만 표시) ===== -->
+<section id="cast">
+  <h3 class="section-title" data-en="Cast">인물 소개</h3>
+  <div class="title-underline"></div>
+  <p class="panorama-hint" data-en="Click a character to see details and their line" style="margin-bottom:24px;">인물을 클릭하면 상세 소개와 대사를 볼 수 있어요</p>
+  <div class="cast-grid">
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="예수" data-role-en="Jesus" data-actor="김수흔" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;예수&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Jesus">예수</div><div class="actor" data-en="Actor: 김수흔">배우: 김수흔</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="베드로" data-role-en="Peter" data-actor="박성민" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;베드로&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Peter">베드로</div><div class="actor" data-en="Actor: 박성민">배우: 박성민</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="가롯 유다" data-role-en="Judas Iscariot" data-actor="박지호" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;가롯 유다&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Judas Iscariot">가롯 유다</div><div class="actor" data-en="Actor: 박지호">배우: 박지호</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="빌라도" data-role-en="Pilate" data-actor="남진후" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;빌라도&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Pilate">빌라도</div><div class="actor" data-en="Actor: 남진후">배우: 남진후</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="삭개오" data-role-en="Zacchaeus" data-actor="김지완" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;삭개오&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Zacchaeus">삭개오</div><div class="actor" data-en="Actor: 김지완">배우: 김지완</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="여인 (마리아)" data-role-en="Woman (Mary)" data-actor="임사랑" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;여인 (마리아)&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Woman (Mary)">여인 (마리아)</div><div class="actor" data-en="Actor: 임사랑">배우: 임사랑</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="나레이터" data-role-en="Narrator" data-actor="최로아" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;나레이터&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Narrator">나레이터</div><div class="actor" data-en="Actor: 최로아">배우: 최로아</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="사회자 1" data-role-en="Host 1" data-actor="김수인" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;사회자 1&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Host 1">사회자 1</div><div class="actor" data-en="Actor: 김수인">배우: 김수인</div></div>
+    <div class="cast-card" tabindex="0" role="button" data-role-ko="사회자 2" data-role-en="Host 2" data-actor="박현동" data-desc-ko="인물 소개글 입력 자리" data-desc-en="Character description placeholder" data-lines="[{&quot;speaker&quot;: &quot;사회자 2&quot;, &quot;line&quot;: &quot;대사 입력 자리&quot;}]"><div class="photo-box sq">사진 넣을 자리</div><div class="role" data-en="Host 2">사회자 2</div><div class="actor" data-en="Actor: 박현동">배우: 박현동</div></div>
+  </div>
+</section>
+
+<!-- ===== 앙상블 & 역할 : 제자들+백성들 큰 단체사진 한 장 ===== -->
+<section id="ensemble" class="alt">
+  <h3 class="section-title" data-en="Ensemble &amp; Roles">앙상블 &amp; 역할</h3>
+  <div class="title-underline"></div>
+
+  <div class="group-photo-card">
+    <div class="photo-box" data-en="Group photo placeholder (Disciples + People)">큰 단체 사진 넣을 자리 (제자들 + 백성들)</div>
+    <div class="group-photo-body">
+      <div class="group-photo-title" data-en="Disciples &amp; People">제자들 &amp; 백성들</div>
+      <div class="group-names">
+        <span class="name-chip">전동준</span>
+        <span class="name-chip">박하준</span>
+        <span class="name-chip">박하온</span>
+        <span class="name-chip">오가영</span>
+        <span class="name-chip">최고은</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4성부 단원 : 탭 전환 (소프라노 → 알토 → 테너 → 베이스) ===== -->
+<section id="choir">
+  <h3 class="section-title" data-en="Choir (4 Parts)">4성부 단원</h3>
+  <div class="title-underline"></div>
+
+  <div class="choir-tabs" id="choirTabs">
+    <button type="button" class="choir-tab active" data-part="SOPRANO">SOPRANO</button>
+    <button type="button" class="choir-tab" data-part="ALTO">ALTO</button>
+    <button type="button" class="choir-tab" data-part="TENOR">TENOR</button>
+    <button type="button" class="choir-tab" data-part="BASS">BASS</button>
+  </div>
+
+  <div class="choir-part-title">
+    <h4 id="choirActiveTitle">SOPRANO</h4>
+    <span class="count" id="choirActiveCount">21명</span>
+  </div>
+
+  <div class="choir-grid" id="choirGrid"></div>
+</section>
+
+<!-- ===== 제작팀 ===== -->
+<section id="team" class="alt">
+  <h3 class="section-title" data-en="Production Team">제작팀</h3>
+  <div class="title-underline"></div>
+  <table class="team-table">
+    <thead><tr><th data-en="Part">파트</th><th data-en="In Charge">담당</th></tr></thead>
+    <tbody>
+      <tr><td>지도교사</td><td>서지훈, 박래희</td></tr>
+      <tr><td>반주</td><td>김효진</td></tr>
+      <tr><td>리더십</td><td>김은수, 정하은</td></tr>
+      <tr><td>디자인팀</td><td>이보리, 김수아, 이시은, 최주영</td></tr>
+      <tr><td>영상팀</td><td>이해온, 김찬양,박별, 한승수, 황태현</td></tr>
+      <tr><td>PPT</td><td>최고은, 김수인, 박예하</td></tr>
+      <tr><td>안무팀</td><td>구하영, 최주영</td></tr>
+      <tr><td>소품·의상팀</td><td>이해인, 박하온, 이성은, 임사랑</td></tr>
+      <tr><td>홈페이지</td><td>최로아, 정하은</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== 넘버 ===== -->
+<section id="songs">
+  <h3 class="section-title" data-en="Songs (Track List)">넘버 (곡 목록)</h3>
+  <div class="title-underline"></div>
+  <div class="songlist">
+    <div class="song-item"><b>1.</b> 우리를 구원할 자 <span class="placeholder">The One Who Will Save Us</span></div>
+    <div class="song-item"><b>2.</b> 영생을 주소서 <span class="placeholder">Grant Us Eternal Life</span></div>
+    <div class="song-item"><b>3.</b> 오직 주님이 <span class="placeholder">Only You, Lord / Miracle</span></div>
+    <div class="song-item"><b>4.</b> 기적</div>
+    <div class="song-item"><b>5.</b> 사랑 때문에 <span class="placeholder">Because of Love</span></div>
+    <div class="song-item"><b>6.</b> 겟세마네 <span class="placeholder">Gethsemane</span></div>
+    <div class="song-item"><b>7.</b> 난 모르오! <span class="placeholder">I Don't Know Him!</span></div>
+    <div class="song-item"><b>8.</b> 예수를 죽여라 <span class="placeholder">Kill Him</span></div>
+    <div class="song-item"><b>9.</b> 주를 다시 볼 수 있다면 <span class="placeholder">If Only I Could See the Lord Again</span></div>
+    <div class="song-item"><b>10.</b> 주께로 가까이 <span class="placeholder">Closer to the Lord</span></div>
+    <div class="song-item"><b>11.</b> 그 사랑 <span class="placeholder">His Love</span></div>
+    <div class="song-item"><b>12.</b> 부활, 그 기적 <span class="placeholder">Miracle: Encountering the Resurrection</span></div>
+  </div>
+</section>
+
+<footer>
+  <span data-en="2026 HIS MUSICAL &middot; The Miracle of the Resurrection">2026 HIS MUSICAL &middot; 기적, 부활을 만나다 (The Miracle of the Resurrection)</span><br>
+</footer>
+
+
+<button id="langToggleBtn" class="lang-toggle-btn" type="button" aria-label="Translate page to English">ENG</button>
+
+<div id="castModalOverlay" class="cast-modal-overlay">
+  <div class="cast-modal">
+    <button class="cast-modal-close" id="castModalClose" aria-label="Close">&times;</button>
+    <div class="photo-box sq" id="modalPhoto">사진 넣을 자리</div>
+    <div class="modal-role" id="modalRole"></div>
+    <div class="modal-actor" id="modalActor"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div class="dialogue-list" id="modalLines"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ===== 1) 영어 번역 (data-en / data-ko 토글) =====
+  var translatables = document.querySelectorAll('[data-en]');
+  translatables.forEach(function(el){ el.dataset.ko = el.innerHTML; });
+  var isEnglish = false;
+  var langBtn = document.getElementById('langToggleBtn');
+
+  function applyLanguage(){
+    translatables.forEach(function(el){
+      el.innerHTML = isEnglish ? el.dataset.en : el.dataset.ko;
+    });
+    document.documentElement.lang = isEnglish ? 'en' : 'ko';
+    langBtn.textContent = isEnglish ? 'KOR' : 'ENG';
+  }
+
+  langBtn.addEventListener('click', function(){
+    isEnglish = !isEnglish;
+    applyLanguage();
+  });
+
+  // ===== 2) 시놉시스 파노라마 자동 재생 =====
+  var panoWrap = document.getElementById('panoramaWrap');
+  var panoTrack = document.getElementById('panoramaTrack');
+  var autoTimer = null;
+
+  function startAutoPlay(){
+    if (!panoWrap || !panoTrack) return;
+    stopAutoPlay();
+    autoTimer = setInterval(function(){
+      var scene = panoTrack.querySelector('.pano-scene');
+      if (!scene) return;
+      var step = scene.offsetWidth;
+      var atEnd = panoWrap.scrollLeft + panoWrap.clientWidth >= panoWrap.scrollWidth - 5;
+      if (atEnd){
+        panoWrap.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        panoWrap.scrollBy({ left: step, behavior: 'smooth' });
+      }
+    }, 3200);
+  }
+  function stopAutoPlay(){
+    if (autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  if (panoWrap){
+    startAutoPlay();
+    panoWrap.addEventListener('mouseenter', stopAutoPlay);
+    panoWrap.addEventListener('mouseleave', startAutoPlay);
+    panoWrap.addEventListener('touchstart', stopAutoPlay, { passive: true });
+    panoWrap.addEventListener('touchend', function(){ setTimeout(startAutoPlay, 4000); });
+  }
+
+  // ===== 3) 인물 클릭 -> 상세/대사(1개) 모달 =====
+  var overlay = document.getElementById('castModalOverlay');
+  var modalRole = document.getElementById('modalRole');
+  var modalActor = document.getElementById('modalActor');
+  var modalDesc = document.getElementById('modalDesc');
+  var modalLines = document.getElementById('modalLines');
+  var closeBtn = document.getElementById('castModalClose');
+
+  function openCastModal(card){
+    var roleKo = card.dataset.roleKo || '';
+    var roleEn = card.dataset.roleEn || '';
+    var actor = card.dataset.actor || '';
+    var descKo = card.dataset.descKo || '';
+    var descEn = card.dataset.descEn || '';
+    var lines = [];
+    try { lines = JSON.parse(card.dataset.lines || '[]'); } catch(e){ lines = []; }
+    lines = lines.slice(0, 1); // 대사는 1개만 표시
+
+    modalRole.textContent = isEnglish ? roleEn : roleKo;
+    modalActor.textContent = (isEnglish ? 'Actor: ' : '배우: ') + actor;
+    modalDesc.textContent = isEnglish ? descEn : descKo;
+
+    modalLines.innerHTML = '';
+    lines.forEach(function(item){
+      var wrap = document.createElement('div');
+      wrap.className = 'dialogue-line';
+      var speaker = document.createElement('div');
+      speaker.className = 'dialogue-speaker';
+      speaker.textContent = (isEnglish ? roleEn : roleKo) + ' :';
+      var text = document.createElement('div');
+      text.className = 'dialogue-text';
+      text.textContent = '“' + item.line + '”';
+      wrap.appendChild(speaker);
+      wrap.appendChild(text);
+      modalLines.appendChild(wrap);
+    });
+
+    overlay.classList.add('open');
+  }
+
+  function closeCastModal(){
+    overlay.classList.remove('open');
+  }
+
+  document.querySelectorAll('.cast-card').forEach(function(card){
+    card.addEventListener('click', function(){ openCastModal(card); });
+    card.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openCastModal(card); }
+    });
+  });
+
+  closeBtn.addEventListener('click', closeCastModal);
+  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeCastModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeCastModal(); });
+
+  // ===== 4) 4성부 단원 : 탭 클릭 시 같은 자리에서 해당 파트만 표시 =====
+  var choirData = {
+    SOPRANO: ["구하영","김수인","김영서","김주니","김찬양","김하율","박이음","박주아","박하온","서윤성","송연우","오유민","이보리","이시은","이해온","임사랑","장하은","정다혜","정하은","최고은","최로아"],
+    ALTO: ["김수아","김은수","데이사라","박별","박예하","박지수","오가영","이성은","이해인","최주영","한서현"],
+    TENOR: ["김수흔","남진후","박성민","박지호","박하준","박현동","전동준","장우성"],
+    BASS: ["김강현","김라엘","김서희","김성준","김수현","김지완","김지훈","이건희","이재휼","정하연","조건희","천현석","최하진","한승수","황태현"]
+  };
+  var choirOrder = ["SOPRANO","ALTO","TENOR","BASS"];
+
+  var choirTabs = document.getElementById('choirTabs');
+  var choirGrid = document.getElementById('choirGrid');
+  var choirActiveTitle = document.getElementById('choirActiveTitle');
+  var choirActiveCount = document.getElementById('choirActiveCount');
+
+  function renderChoirPart(part){
+    var members = choirData[part] || [];
+
+    choirActiveTitle.textContent = part;
+    choirActiveCount.textContent = members.length + '명';
+
+    choirGrid.innerHTML = '';
+    members.forEach(function(name){
+      var member = document.createElement('div');
+      member.className = 'choir-member';
+      var photo = document.createElement('div');
+      photo.className = 'photo-box r32';
+      photo.textContent = '사진';
+      var nameEl = document.createElement('div');
+      nameEl.className = 'choir-name';
+      nameEl.textContent = name;
+      member.appendChild(photo);
+      member.appendChild(nameEl);
+      choirGrid.appendChild(member);
+    });
+
+    if (choirTabs){
+      choirTabs.querySelectorAll('.choir-tab').forEach(function(t){
+        t.classList.toggle('active', t.dataset.part === part);
+      });
+    }
+  }
+
+  if (choirTabs){
+    choirTabs.querySelectorAll('.choir-tab').forEach(function(tab){
+      tab.addEventListener('click', function(){ renderChoirPart(tab.dataset.part); });
+    });
+  }
+
+  renderChoirPart(choirOrder[0]); // 기본값: SOPRANO
+})();
+</script>
+
+</body>
+</html>
