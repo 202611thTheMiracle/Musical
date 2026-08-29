@@ -64,22 +64,25 @@
   @media (max-width:640px){ .pano-scene{ width:88vw; } }
 
   /* ===== 인물 소개 : 카드 공통 스타일 ===== */
-  .cast-grid{ display:grid; gap:22px; width:100%; }
-  .cast-card{
-    background:var(--white); border:1px solid var(--card-border); border-radius:var(--radius);
-    padding:20px 16px; text-align:center; transition:.25s; box-shadow:0 2px 8px rgba(0,0,0,0.04);
-  }
-  .cast-card:hover{ transform:translateY(-4px); box-shadow:0 10px 20px rgba(122,18,32,0.15); }
-  .cast-card .photo-box{ margin-bottom:14px; }
-  .role{ font-weight:700; color:var(--burgundy); font-size:1.05rem; }
-  .actor{ font-size:.92rem; color:#666; margin-top:4px; }
-
-  /* ===== 인물 소개 : 비중에 따른 행 구성 ===== */
-  .cast-row{ display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:26px; }
-  .cast-row .cast-card{ flex:0 0 200px; max-width:200px; cursor:pointer; }
-  .cast-secondary{ margin-top:36px; padding-top:30px; border-top:2px dashed var(--card-border); }
-  .cast-secondary-label{ text-align:center; font-weight:800; color:var(--burgundy); margin-bottom:20px; font-size:1rem; letter-spacing:1px; }
-
+.cast-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:24px; width:100%; justify-items:center; }
+      .cast-card{
+        background:var(--white); border:1px solid var(--card-border); border-radius:var(--radius);
+        padding:20px 16px; text-align:center; transition:.25s; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+        width:100%; max-width:210px; cursor:pointer;
+      }
+      .cast-card:hover{ transform:translateY(-6px); box-shadow:0 12px 24px rgba(122,18,32,0.18); }
+      .cast-card:focus-visible{ outline:2px solid var(--burgundy); outline-offset:3px; }
+      .cast-card .photo-box{ margin-bottom:14px; }
+      .role{ font-weight:700; color:var(--burgundy); font-size:1.05rem; }
+      .actor{ font-size:.92rem; color:#666; margin-top:4px; }
+      /* ===== 인물 소개 : 비중에 따른 반응형 그리드 구성 ===== */
+      .cast-row{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 210px)); justify-content:center; gap:24px; margin-bottom:30px; width:100%; }
+      .cast-secondary{ margin-top:36px; padding-top:30px; border-top:2px dashed var(--card-border); }
+      .cast-secondary-label{ text-align:center; font-weight:800; color:var(--burgundy); margin-bottom:20px; font-size:1rem; letter-spacing:1px; }
+      @media (max-width:640px){
+        .cast-row{ grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:16px; }
+        .cast-card{ max-width:100%; padding:14px 10px; }
+      }
   /* ===== 앙상블 & 역할 : 제자들+백성들 큰 단체사진 한 장 ===== */
   .group-photo-card{
     width:100%; background:var(--white); border:1px solid var(--card-border); border-radius:var(--radius);
