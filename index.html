@@ -523,9 +523,10 @@
       return Math.max(0,Math.min(position,maxScroll));
     }
   
-    function animateTo(target){
+    function animateTo(target,duration){
       if(animationFrame) cancelAnimationFrame(animationFrame);
-      var start=el.scrollLeft, distance=target-start, duration=260, startTime=performance.now();
+      var start=el.scrollLeft, distance=target-start, startTime=performance.now();
+      duration=duration||260;
       var oldSnap=el.style.scrollSnapType, oldBehavior=el.style.scrollBehavior;
       el.style.scrollSnapType='none';
       el.style.scrollBehavior='auto';
@@ -568,7 +569,11 @@
   
       var nextIndex=moved<0 ? startIndex+1 : startIndex-1;
       nextIndex=Math.max(0,Math.min(nextIndex,items.length-1));
-      animateTo(getCenteredPosition(items[nextIndex]));
+      
+      var isPartChange=items[startIndex].dataset.part && items[nextIndex].dataset.part &&
+                       items[startIndex].dataset.part!==items[nextIndex].dataset.part;
+      
+      animateTo(getCenteredPosition(items[nextIndex]),isPartChange ? 150 : 260);
     });
   
     el.addEventListener('dragstart',function(e){ e.preventDefault(); });
