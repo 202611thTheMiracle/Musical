@@ -135,10 +135,10 @@
   scroll-snap-type:x mandatory;
   scroll-behavior:smooth;
   }
-  .panorama-track{ display:flex; gap:0; width:max-content; }
+  .panorama-track{ display:flex; gap:8px; width:max-content; }
   .pano-scene{
-  scroll-snap-align:start;
-  flex:0 0 auto;
+  scroll-snap-align:center;
+  scroll-snap-stop:always;  flex:0 0 auto;
   width:clamp(260px,60vw,640px);
   background:var(--white);
   }
@@ -211,7 +211,8 @@
   }
   .choir-slider-track{ display:flex; gap:36px; width:max-content; padding: 4px 2px; }
   .choir-slide{
-    scroll-snap-align:start;
+    scroll-snap-align:center;
+    scroll-snap-stop:always;
     flex:0 0 auto;
     width: clamp(340px, 70vw, 640px);
     padding: 0;
@@ -501,51 +502,79 @@
   // ===== 시놉시스 파노라마: 자동 스크롤 제거, 수동 스크롤만 사용 =====
   var panoWrap = document.getElementById('panoramaWrap');
 
-  function enableMouseDragScroll(el){
+  function enableMouseDragScroll(el, itemSelector){
     if (!el) return;
-
-    var isDragging = false;
-    var startX = 0;
-    var startScrollLeft = 0;
-    var previousSnapType = '';
+    var isDragging=false, startX=0, startIndex=0, animationFrame=null, threshold=10;
   
-    el.addEventListener('mousedown', function(e){
-      if (e.button !== 0) return;
+    function getItems(){ return Array.from(el.querySelectorAll(itemSelector)); }
   
-      isDragging = true;
-      startX = e.clientX;
-      startScrollLeft = el.scrollLeft;
+    function getClosestIndex(){
+      var items=getItems(), viewportCenter=el.scrollLeft+(el.clientWidth/2), closestIndex=0, closestDistance=Infinity;
+      items.forEach(function(item,index){
+        var itemCenter=item.offsetLeft+(item.offsetWidth/2), distance=Math.abs(itemCenter-viewportCenter);
+        if(distance<closestDistance){ closestDistance=distance; closestIndex=index; }
+      });
+      return closestIndex;
+    }
   
+    function getCenteredPosition(item){
+      var position=item.offsetLeft-((el.clientWidth-item.offsetWidth)/2);
+      var maxScroll=el.scrollWidth-el.clientWidth;
+      return Math.max(0,Math.min(position,maxScroll));
+    }
+  
+    function animateTo(target){
+      if(animationFrame) cancelAnimationFrame(animationFrame);
+      var start=el.scrollLeft, distance=target-start, duration=260, startTime=performance.now();
+      var oldSnap=el.style.scrollSnapType, oldBehavior=el.style.scrollBehavior;
+      el.style.scrollSnapType='none';
+      el.style.scrollBehavior='auto';
+  
+      function animation(currentTime){
+        var progress=Math.min((currentTime-startTime)/duration,1);
+        var eased=progress<0.5 ? 4*progress*progress*progress : 1-Math.pow(-2*progress+2,3)/2;
+        el.scrollLeft=start+(distance*eased);
+  
+        if(progress<1){
+          animationFrame=requestAnimationFrame(animation);
+        }else{
+          animationFrame=null;
+          el.style.scrollSnapType=oldSnap;
+          el.style.scrollBehavior=oldBehavior;
+        }
+      }
+      animationFrame=requestAnimationFrame(animation);
+    }
+  
+    el.addEventListener('mousedown',function(e){
+      if(e.button!==0) return;
+      isDragging=true;
+      startX=e.clientX;
+      startIndex=getClosestIndex();
       el.classList.add('is-dragging');
-  
-      previousSnapType = el.style.scrollSnapType;
-      el.style.scrollSnapType = 'none';
-  
       e.preventDefault();
     });
   
-    window.addEventListener('mousemove', function(e){
-      if (!isDragging) return;
-  
-      var distance = e.clientX - startX;
-      el.scrollLeft = startScrollLeft - distance;
-    });
-  
-    window.addEventListener('mouseup', function(){
-      if (!isDragging) return;
-  
-      isDragging = false;
+    window.addEventListener('mouseup',function(e){
+      if(!isDragging) return;
+      isDragging=false;
       el.classList.remove('is-dragging');
   
-      el.style.scrollSnapType = previousSnapType;
+      var moved=e.clientX-startX, items=getItems();
+      if(Math.abs(moved)<threshold){
+        animateTo(getCenteredPosition(items[startIndex]));
+        return;
+      }
+  
+      var nextIndex=moved<0 ? startIndex+1 : startIndex-1;
+      nextIndex=Math.max(0,Math.min(nextIndex,items.length-1));
+      animateTo(getCenteredPosition(items[nextIndex]));
     });
   
-    el.addEventListener('dragstart', function(e){
-      e.preventDefault();
-    });
+    el.addEventListener('dragstart',function(e){ e.preventDefault(); });
   }
   
-  enableMouseDragScroll(panoWrap);
+  enableMouseDragScroll(panoWrap, '.pano-scene');
   
   var overlay = document.getElementById('castModalOverlay');
   var modalRole = document.getElementById('modalRole');
@@ -701,7 +730,7 @@
   var choirWrap = document.getElementById('choirSliderWrap');
   var choirTrack = document.getElementById('choirSliderTrack');
   
-  enableMouseDragScroll(choirWrap);
+  enableMouseDragScroll(choirWrap, '.choir-slide');
   
   var slideEls = [];
 
