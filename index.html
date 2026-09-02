@@ -549,6 +549,13 @@
   
     el.addEventListener('mousedown',function(e){
       if(e.button!==0) return;
+    
+      var rect=el.getBoundingClientRect();
+      var y=e.clientY-rect.top;
+    
+      /* 하단 스크롤바를 누른 경우 브라우저 기본 스크롤 동작 유지 */
+      if(y>=el.clientHeight) return;
+    
       isDragging=true;
       startX=e.clientX;
       startIndex=getClosestIndex();
