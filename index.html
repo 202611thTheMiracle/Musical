@@ -195,6 +195,20 @@
     padding-bottom:18px;
     -webkit-overflow-scrolling:touch;
   }
+  .panorama-wrap,
+  .choir-slider-wrap{
+    cursor: grab;
+  }
+  .panorama-wrap.is-dragging,
+  .choir-slider-wrap.is-dragging{
+    cursor: grabbing;
+    user-select: none;
+  }
+  .panorama-wrap img,
+  .choir-slider-wrap img{
+    -webkit-user-drag: none;
+    user-select: none;
+  }
   .choir-slider-track{ display:flex; gap:36px; width:max-content; padding: 4px 2px; }
   .choir-slide{
     scroll-snap-align:start;
@@ -487,6 +501,52 @@
   // ===== 시놉시스 파노라마: 자동 스크롤 제거, 수동 스크롤만 사용 =====
   var panoWrap = document.getElementById('panoramaWrap');
 
+  function enableMouseDragScroll(el){
+    if (!el) return;
+
+    var isDragging = false;
+    var startX = 0;
+    var startScrollLeft = 0;
+    var previousSnapType = '';
+  
+    el.addEventListener('mousedown', function(e){
+      if (e.button !== 0) return;
+  
+      isDragging = true;
+      startX = e.clientX;
+      startScrollLeft = el.scrollLeft;
+  
+      el.classList.add('is-dragging');
+  
+      previousSnapType = el.style.scrollSnapType;
+      el.style.scrollSnapType = 'none';
+  
+      e.preventDefault();
+    });
+  
+    window.addEventListener('mousemove', function(e){
+      if (!isDragging) return;
+  
+      var distance = e.clientX - startX;
+      el.scrollLeft = startScrollLeft - distance;
+    });
+  
+    window.addEventListener('mouseup', function(){
+      if (!isDragging) return;
+  
+      isDragging = false;
+      el.classList.remove('is-dragging');
+  
+      el.style.scrollSnapType = previousSnapType;
+    });
+  
+    el.addEventListener('dragstart', function(e){
+      e.preventDefault();
+    });
+  }
+  
+  enableMouseDragScroll(panoWrap);
+  
   var overlay = document.getElementById('castModalOverlay');
   var modalRole = document.getElementById('modalRole');
   var modalActor = document.getElementById('modalActor');
@@ -640,6 +700,9 @@
 
   var choirWrap = document.getElementById('choirSliderWrap');
   var choirTrack = document.getElementById('choirSliderTrack');
+  
+  enableMouseDragScroll(choirWrap);
+  
   var slideEls = [];
 
   function buildMemberPhoto(part, name){
